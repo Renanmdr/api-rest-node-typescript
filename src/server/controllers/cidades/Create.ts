@@ -1,80 +1,29 @@
-import { Request, RequestHandler, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import { Request, Response } from 'express';
 import * as yup from 'yup';
+import { validation } from '../../shared/middlewares';
+import { StatusCodes } from 'http-status-codes';
 
 interface Icidade {
   nome: string;
-  estado: string;
-}
-
-const bodyValidation: yup.ObjectSchema<Icidade> = yup.object().shape({
-  nome: yup.string().required().min(3),
-  estado: yup.string().required().min(2),
-
-});
-
-export const createBodyValidation: RequestHandler = async (req, res, next) => {
-  try {
-    await bodyValidation.validate(req.body, { abortEarly: false });
-    return next();
-  } catch (err) {
-
-    const yupError = err as yup.ValidationError;
-
-    const errors: Record<string, string> = {};
-
-
-    yupError.inner.forEach(error => {
-      if (!error.path) return;
-      errors[error.path] = error.message;
-
-    });
-
-
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      errors
-
-    });
-
-  }
-};
-
-interface IFilter {
-  filter: string,
 
 }
 
-const queryValidation: yup.ObjectSchema<IFilter> = yup.object().shape({
-  filter: yup.string().required().min(3),
+// interface IQuery {
+//   page: number;
+
+// }
 
 
-});
-
-export const createQueryValidation: RequestHandler = async (req, res, next) => {
-  try {
-    await queryValidation.validate(req.body, { abortEarly: false });
-    return next();
-  } catch (err) {
-
-    const yupError = err as yup.ValidationError;
-
-    const errors: Record<string, string> = {};
 
 
-    yupError.inner.forEach(error => {
-      if (!error.path) return;
-      errors[error.path] = error.message;
+export const createValidation = validation((getSchema) => ({
+  body: getSchema<Icidade>(yup.object().shape({
+    nome: yup.string().required().min(3),
 
-    });
+  })),
 
 
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      errors
-
-    });
-
-  }
-};
+}));
 
 
 
@@ -85,5 +34,5 @@ export const create = async (req: Request<{}, {}, Icidade>, res: Response) => {
 
 
 
-  return res.json({ message: 'create' });
+  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json('Não implementado!');
 };

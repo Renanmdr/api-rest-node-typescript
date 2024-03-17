@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middlewares';
 import { StatusCodes } from 'http-status-codes';
+import { ICidade } from '../../database/models';
+import { cidadesProvider } from '../../database/providers/cidades';
 
-interface Icidade {
+interface IPropsBody extends Omit<ICidade, 'id'> {
   nome: string;
 
 }
@@ -17,8 +19,8 @@ interface Icidade {
 
 
 export const createValidation = validation((getSchema) => ({
-  body: getSchema<Icidade>(yup.object().shape({
-    nome: yup.string().required().min(3),
+  body: getSchema<IPropsBody>(yup.object().shape({
+    nome: yup.string().required().min(3).max(150),
 
   })),
 
@@ -28,11 +30,15 @@ export const createValidation = validation((getSchema) => ({
 
 
 
-export const create = async (req: Request<{}, {}, Icidade>, res: Response) => {
+export const create = async (req: Request<{}, {}, IPropsBody>, res: Response) => {
 
-  console.log(req.body);
+  const result = await cidadesProvider.create(req.body);
+
+  if (result instanceof Error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ errors: { default: result.message } });
+  }
 
 
 
-  return res.status(StatusCodes.CREATED).json(1);
+  return res.status(StatusCodes.CREATED).json(result);
 };

@@ -9,7 +9,7 @@
     "knex:rollback-all": "npx knex --knexfile ./src/server/database/knex/environment.ts migrate:rollback --all",
     "knex:rollback": "npx knex --knexfile ./src/server/database/knex/environment.ts migrate:rollback",
     "knex:migrate": "npx knex --knexfile ./src/server/database/knex/environment.ts migrate:latest",
-    "knex:seed": "npx knex --knexfile ./src/server/database/knex/environment.ts migrate:seed",
+    "knex:seed": "npx knex --knexfile ./src/server/database/knex/environment.ts seed:run",
     "production": "node ./build/index.js",
     "start": "ts-node-dev --exit-child --ignore-watch node_modules ./src/index.ts"
   },

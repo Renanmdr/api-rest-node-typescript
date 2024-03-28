@@ -8,6 +8,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await Knex.destroy();
+  await Knex.seed.run();
 });
 
 export const testServer = supertest(server);

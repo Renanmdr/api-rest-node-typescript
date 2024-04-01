@@ -6,7 +6,7 @@ import { ICidade } from '../../database/models';
 import { cidadesProvider } from '../../database/providers/cidades';
 
 interface IPropsBody extends Omit<ICidade, 'id'> {
-  nome: string;
+
 
 }
 

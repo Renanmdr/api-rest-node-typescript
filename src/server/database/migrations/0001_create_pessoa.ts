@@ -3,7 +3,7 @@ import { ETableNames } from '../ETableNames';
 
 export async function up(Knex: Knex) {
   return Knex.schema.createTable(ETableNames.pessoa, (table) => {
-    table.bigIncrements('id').index().notNullable();
+    table.bigIncrements('id').primary().index().notNullable();
     table.string('nomeCompleto').index().notNullable();
     table.string('email').unique().notNullable();
 

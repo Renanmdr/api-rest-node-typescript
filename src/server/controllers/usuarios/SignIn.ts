@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { usuariosProvider } from '../../database/providers/usuarios';
 import { IUsuario } from '../../database/models';
 import { StatusCodes } from 'http-status-codes';
+import { PasswordCrypto } from '../../shared/services/PasswordCrypto';
 
 
 
@@ -27,8 +28,8 @@ export const signIn = async (req: Request<{}, {}, IParamsProps>, res: Response) 
   if (result instanceof Error) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ errors: { default: 'Email ou senha são inválidos' } });
   }
-
-  if (senha !== result.senha) {
+  const passwordMatch = await PasswordCrypto.verifyPassword(senha, result.senha);
+  if (!passwordMatch) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ errors: { default: 'Email ou senha são inválidos' } });
   } else {
     return res.status(StatusCodes.OK).json({ accessToken: 'teste.teste.teste' });

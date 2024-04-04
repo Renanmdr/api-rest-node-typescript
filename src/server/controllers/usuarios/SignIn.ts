@@ -5,6 +5,7 @@ import { usuariosProvider } from '../../database/providers/usuarios';
 import { IUsuario } from '../../database/models';
 import { StatusCodes } from 'http-status-codes';
 import { PasswordCrypto } from '../../shared/services/PasswordCrypto';
+import { JWTService } from '../../shared/services/JWTService';
 
 
 
@@ -28,11 +29,21 @@ export const signIn = async (req: Request<{}, {}, IParamsProps>, res: Response) 
   if (result instanceof Error) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ errors: { default: 'Email ou senha são inválidos' } });
   }
+
   const passwordMatch = await PasswordCrypto.verifyPassword(senha, result.senha);
   if (!passwordMatch) {
+
     return res.status(StatusCodes.UNAUTHORIZED).json({ errors: { default: 'Email ou senha são inválidos' } });
+
   } else {
-    return res.status(StatusCodes.OK).json({ accessToken: 'teste.teste.teste' });
+
+    const accessToken = JWTService.sign({ uid: result.id });
+
+    if (accessToken === 'JWT_SECRET_NOT_FOUND') {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ errors: { default: 'Email ou senha são inválidos' } });
+    }
+
+    return res.status(StatusCodes.OK).json({ accessToken });
 
   }
 

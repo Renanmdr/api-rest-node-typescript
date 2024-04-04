@@ -3,7 +3,7 @@ import { testServer } from '../jest.setup';
 
 describe('usuario - SignUp', () => {
   it('Cadastra usuario', async () => {
-    const rest1 = await testServer.post('/cadastrar').send({ nome: 'Renan', email: 'renan@gmail.com', senha: 123456 });
+    const rest1 = await testServer.post('/cadastrar').send({ nome: 'Renan', email: 'renan@gmail.com', senha: '123456' });
     //  console.log('res1', rest1);
 
     expect(rest1.statusCode).toEqual(StatusCodes.CREATED);

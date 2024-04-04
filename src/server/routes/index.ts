@@ -15,7 +15,6 @@ router.get('/cidades/:id', ensureAuthenticated, cidadesController.getByIdValidat
 router.put('/cidades/:id', ensureAuthenticated, cidadesController.updateByIdValidation, cidadesController.updateById);
 router.delete('/cidades/:id', ensureAuthenticated, cidadesController.deleteByIdValidation, cidadesController.deleteById);
 
-
 router.post('/pessoas', ensureAuthenticated, pessoasController.createValidation, pessoasController.create);
 router.get('/pessoas', ensureAuthenticated, pessoasController.getAllValidation, pessoasController.getAll);
 router.get('/pessoas/:id', ensureAuthenticated, pessoasController.getByIdValidation, pessoasController.getById);
